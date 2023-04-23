@@ -113,7 +113,7 @@ def main():
 
     filenames = [filename for filename in os.listdir(input_folder) if filename.endswith(".pdf")]
 
-    num_workers = min(cpu_count(), len(filenames))
+    num_workers = min(cpu_count(), len(filenames),5)
 
     with Pool(num_workers) as p:
         p.map(wrapped_process_pdf, [(filename, input_folder, output_folder) for filename in filenames])
