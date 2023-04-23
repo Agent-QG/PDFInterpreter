@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 5.  Change your openai api key in env.txt (You can get your key on https://platform.openai.com/account/api-keys)
 6.  Change your target language and model in env.txt (Chinese and gpt-3.5-turbo are set as default)
-7.  Rename `env.txt` as `.env`
+7.  Rename the file 'env.txt' to '.env'
 ## Usage
 1. Copy your PDF files to `input/` folder
 2. Start
