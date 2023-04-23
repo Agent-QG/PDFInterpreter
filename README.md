@@ -9,11 +9,12 @@ This is a Python script for parsing PDF files and interpreting and analyzing the
 ```shell
 pip install requirements.txt
 ```
-3.  Change your openai api key in env.txt
-4.  Change your target language and model in env.txt (Chinese and gpt-3.5-turbo are set as default
-5.  rename env.txt as .env
+3.  Change your openai api key in env.txt (You can get your key on https://platform.openai.com/account/api-keys)
+4.  Change your target language and model in env.txt (Chinese and gpt-3.5-turbo are set as default)
+5.  rename `env.txt` as `.env`
 ## Usage
 1. Copy your PDF files to input folder
-2. Start by ```shell
+2. Start
+```shell
 python main.py
 ```
