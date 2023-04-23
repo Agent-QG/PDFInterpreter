@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double PDF Reader</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .pdf-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+        iframe {
+            width: 45%;
+            height: 80vh;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="pdf-container">
+        <iframe id="pdf1" src="" type="application/pdf"></iframe>
+        <iframe id="pdf2" src="" type="application/pdf"></iframe>
+    </div>
+    <div>
+        <input type="file" id="input1" accept=".pdf">
+        <input type="file" id="input2" accept=".pdf">
+    </div>
+    <script>
+        document.getElementById('input1').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                document.getElementById('pdf1').src = url;
+            }
+        });
+
+        document.getElementById('input2').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                document.getElementById('pdf2').src = url;
+            }
+        });
+    </script>
+</body>
+</html>
