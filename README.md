@@ -16,9 +16,8 @@ This is a Python script for parsing PDF files and interpreting and analyzing the
 pip install -r requirements.txt
 ```
 3.  Install wkhtmltopdf
-```shell
+
 Go to https://wkhtmltopdf.org/downloads.html to download `wkhtmltopdf`
-```
 5.  Change your openai api key in env.txt (You can get your key on https://platform.openai.com/account/api-keys)
 6.  Change your target language and model in env.txt (Chinese and gpt-3.5-turbo are set as default)
 7.  rename `env.txt` as `.env`
