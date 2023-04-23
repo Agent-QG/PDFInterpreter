@@ -7,6 +7,8 @@ import openai
 import pdfkit
 from tqdm import tqdm
 from dotenv import load_dotenv
+from multiprocessing import Pool, cpu_count
+from tqdm.auto import tqdm
 
 
 load_dotenv()
@@ -35,7 +37,7 @@ def chatgpt_interpret(text, max_tokens=3000, max_retries=5, retry_delay=5):
                 model = model,
                 messages=[{"role": "system", "content": "You are an AI assistant."},
                           {"role": "user",
-                           "content": f"Please use Markdown syntax to explain and analyze the following content in {language}：\n{text}"}],
+                           "content": f"Please explain and analyze the following content in {language} and answer in Markdown：\n{text}"}],
                 max_tokens=max_tokens,
                 n=1,
                 temperature=0.5,
@@ -73,37 +75,48 @@ def markdown_to_pdf(markdown_text, output_path):
         'encoding': "UTF-8"
     }
     pdfkit.from_string(html, output_path, options=options)
+def process_pdf(filename, input_folder, output_folder):
+    if filename.endswith(".pdf"):
+        pdf_path = os.path.join(input_folder, filename)
+        output_pdf = os.path.join(
+            output_folder, os.path.splitext(filename)[0] + "_explained.pdf"
+        )
 
+        pdf_contents = read_pdf(pdf_path)
+        interpretations = []
+
+        for index, content in enumerate(
+            tqdm(pdf_contents, desc=f"Processing {filename} ")
+        ):
+            interpretation_page = []
+            paragraphs = content.split("\n\n")
+            for paragraph in paragraphs:
+                if len(paragraph.strip()) > 0:
+                    sub_paragraphs = split_text(paragraph, 3000)
+                    for sub_paragraph in sub_paragraphs:
+                        interpretation = chatgpt_interpret(sub_paragraph)
+                        interpretation_page.append(interpretation)
+
+            interpretation_page.append(f"[p{index + 1}]")
+
+            interpretations.append("\n\n".join(interpretation_page))
+
+        markdown_interpretations = "\n\n---\n\n".join(interpretations)
+        markdown_to_pdf(markdown_interpretations, output_pdf)
+
+def wrapped_process_pdf(args):
+    return process_pdf(*args)
 
 def main():
     input_folder = "input"
     output_folder = "output"
 
-    for filename in os.listdir(input_folder):
-        if filename.endswith(".pdf"):
-            pdf_path = os.path.join(input_folder, filename)
-            output_pdf = os.path.join(output_folder, os.path.splitext(filename)[0] + "_explained.pdf")
+    filenames = [filename for filename in os.listdir(input_folder) if filename.endswith(".pdf")]
 
-            pdf_contents = read_pdf(pdf_path)
-            interpretations = []
+    num_workers = min(cpu_count(), len(filenames))
 
-            for index, content in enumerate(tqdm(pdf_contents, desc=f"Processing {filename} ")):
-                interpretation_page = []
-                paragraphs = content.split('\n\n')
-                for paragraph in paragraphs:
-                    if len(paragraph.strip()) > 0:
-                        sub_paragraphs = split_text(paragraph, 3000)
-                        for sub_paragraph in sub_paragraphs:
-                            interpretation = chatgpt_interpret(sub_paragraph)
-                            interpretation_page.append(interpretation)
-
-                interpretation_page.append(f"[p{index + 1}]")
-
-                interpretations.append("\n\n".join(interpretation_page))
-
-            markdown_interpretations = "\n\n---\n\n".join(interpretations)
-            markdown_to_pdf(markdown_interpretations, output_pdf)
-
+    with Pool(num_workers) as p:
+        p.map(wrapped_process_pdf, [(filename, input_folder, output_folder) for filename in filenames])
 
 if __name__ == "__main__":
     main()
