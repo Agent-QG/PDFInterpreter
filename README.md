@@ -24,3 +24,15 @@ pip install -r requirements.txt
 ```shell
 python main.py
 ```
+## 注意事项/已知限制
+
+- 由于尚未获得GPT-4.0的访问权限，该项目目前无法读取PDF中的图片。会持续关注GPT-4.0的更新，并在获得访问权限后更新项目以支持图片解析。
+
+- 本项目在处理大型PDF文件时可能会遇到性能瓶颈。将继续优化代码以提高处理速度和效率。
+
+## Known Limitations/Notes
+
+- As we currently do not have access to GPT-4.0, this project is unable to read images within PDFs. Will continue to monitor updates on GPT-4.0 and update the project to support image interpretation once access is granted.
+
+- The project may encounter performance bottlenecks when processing large PDF files. Will continue to optimize the code to improve processing speed and efficiency.
+
