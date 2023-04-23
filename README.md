@@ -8,6 +8,7 @@ This is a Python script for parsing PDF files and interpreting and analyzing the
 - `input/` - Folder to place your input PDF files.
 - `output/` - Folder where the processed PDF files will be saved.
 - `main.py` - Main script to run the project.
+- `PDFReader.html` - A PDF reader to read two PDFs at the same time.
 
 ## Set Up
 1. Download the repository
