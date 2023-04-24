@@ -32,6 +32,18 @@ python main.py
 ## Read your PDFs
 By running PDFReader.html, you can read two PDFs at the same time, which is convenient for comparing PDFs.
 
+## General errors
+- Please make sure you have installed `wkhtmltopdf`
+- If you encourtered wkhtmltopdf error, please set your wkhtmltopdf path in `.env` file
+- For MacOS, you can get your wkhtmltopdf path by 
+```shell
+which wkhtmltopdf
+```
+- For Windows, you can get your wkhtmltopdf path by 
+```shell
+where wkhtmltopdf
+```
+
 ## 注意事项/已知限制
 
 - 由于尚未获得GPT-4.0的访问权限，该项目目前无法读取PDF中的图片。会持续关注GPT-4.0的更新，并在获得访问权限后更新项目以支持图片解析。
