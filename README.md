@@ -34,7 +34,7 @@ By running PDFReader.html, you can read two PDFs at the same time, which is conv
 
 ## General errors
 - Please make sure you have installed `wkhtmltopdf`
-- If you encourtered wkhtmltopdf error, please set your wkhtmltopdf path in `.env` file
+- If you encourtered wkhtmltopdf error, please add your wkhtmltopdf path in `.env` file
 - For MacOS, you can get your wkhtmltopdf path by 
 ```shell
 which wkhtmltopdf
