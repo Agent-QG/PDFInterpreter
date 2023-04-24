@@ -34,12 +34,12 @@ By running PDFReader.html, you can read two PDFs at the same time, which is conv
 
 ## General errors
 - Please make sure you have installed `wkhtmltopdf`
-- If you encourtered wkhtmltopdf error, please add your wkhtmltopdf path in `.env` file
-- For MacOS, you can get your wkhtmltopdf path by 
+- If you encounter a wkhtmltopdf error, please add the path to your wkhtmltopdf path in the .env file
+- For MacOS, the default path is `/usr/local/bin/wkhtmltopdf`. You can get your wkhtmltopdf path by 
 ```shell
 which wkhtmltopdf
 ```
-- For Windows, you can get your wkhtmltopdf path by 
+- For Windows, the default path is `C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe`. You can get your wkhtmltopdf path by 
 ```shell
 where wkhtmltopdf
 ```
