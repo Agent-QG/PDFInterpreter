@@ -13,7 +13,7 @@ from tqdm.auto import tqdm
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
-
+wkhtmltopdf_path = os.getenv("WKHTMLTOPDFPATH")
 
 def read_pdf(file_path):
     with open(file_path, "rb") as file:
@@ -34,7 +34,7 @@ def chatgpt_interpret(text, max_tokens=3000, max_retries=5, retry_delay=5):
     while retries < max_retries:
         try:
             response = openai.ChatCompletion.create(
-                model = model,
+                model=model,
                 messages=[{"role": "system", "content": "You are an AI assistant."},
                           {"role": "user",
                            "content": f"Please explain and analyze the following content in {language} and answer in Markdown：\n{text}"}],
@@ -49,6 +49,15 @@ def chatgpt_interpret(text, max_tokens=3000, max_retries=5, retry_delay=5):
                 time.sleep(retry_delay)
             else:
                 raise e
+        except openai.error.InvalidRequestError as e:
+            if "maximum context length" in str(e):
+                max_tokens -= 500
+                if max_tokens < 1:
+                    print("max tokens is"+str(max_tokens))
+                    return "TOO LONG!"
+            else:
+                raise e
+
 
 
 def split_text(text, max_tokens):
@@ -68,13 +77,25 @@ def split_text(text, max_tokens):
 
     return chunks
 
+def fix_markdown_issues(text):
+    text = text.replace("--", "—")
+    text = re.sub(r'(?<!\\)(~~)', r'\\\1', text)
 
-def markdown_to_pdf(markdown_text, output_path):
+    return text
+
+
+def markdown_to_pdf(markdown_text, output_path,wkhtmltopdf_path):
     html = markdown2.markdown(markdown_text)
     options = {
         'encoding': "UTF-8"
     }
-    pdfkit.from_string(html, output_path, options=options)
+    if wkhtmltopdf_path:
+        config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
+        pdfkit.from_string(html, output_path, options=options, configuration=config)
+    else:
+        pdfkit.from_string(html, output_path, options=options)
+
+
 def process_pdf(filename, input_folder, output_folder):
     if filename.endswith(".pdf"):
         pdf_path = os.path.join(input_folder, filename)
@@ -86,7 +107,7 @@ def process_pdf(filename, input_folder, output_folder):
         interpretations = []
 
         for index, content in enumerate(
-            tqdm(pdf_contents, desc=f"Processing {filename} ")
+                tqdm(pdf_contents, desc=f"Processing {filename} ")
         ):
             interpretation_page = []
             paragraphs = content.split("\n\n")
@@ -95,6 +116,10 @@ def process_pdf(filename, input_folder, output_folder):
                     sub_paragraphs = split_text(paragraph, 3000)
                     for sub_paragraph in sub_paragraphs:
                         interpretation = chatgpt_interpret(sub_paragraph)
+                        if interpretation == "TOO LONG!":
+                            print(f"Page {index + 1} is too LONG!")
+                            break
+                        interpretation = fix_markdown_issues(interpretation)
                         interpretation_page.append(interpretation)
 
             interpretation_page.append(f"[p{index + 1}]")
@@ -102,7 +127,7 @@ def process_pdf(filename, input_folder, output_folder):
             interpretations.append("\n\n".join(interpretation_page))
 
         markdown_interpretations = "\n\n---\n\n".join(interpretations)
-        markdown_to_pdf(markdown_interpretations, output_pdf)
+        markdown_to_pdf(markdown_interpretations, output_pdf,wkhtmltopdf_path)
 
 def wrapped_process_pdf(args):
     return process_pdf(*args)
