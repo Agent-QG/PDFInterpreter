@@ -15,19 +15,25 @@ wkhtmltopdf_path = os.getenv("WKHTMLTOPDFPATH")
 
 def main():
     input_folder = "input"
-    output_folder = "output"
-    filenames = [filename for filename in os.listdir(input_folder) if filename.endswith(".pdf")]
-    chat_gpt = Chat_gpt(api_key=api_key, language=language, model=model)
-    for file in filenames:
-        pdf_path = os.path.join(input_folder, file)
-        output_pdf = os.path.join(
-            output_folder, os.path.splitext(file)[0] + "_explained.pdf"
-        )
-        creator = Creator(pdf_path, chat_gpt)
-        parsed_list = creator.process()
-        markdown_interpretations = "\n\n---\n\n".join(parsed_list)
-        markdown_to_pdf(markdown_interpretations, output_pdf, wkhtmltopdf_path)
+    output_folder = "output/DL_Explained"
 
+    for root, _, filenames in os.walk(input_folder):
+        for filename in filenames:
+            if filename.endswith(".pdf"):
+                pdf_path = os.path.join(root, filename)
+                relative_path = os.path.relpath(root, input_folder)
+                output_subfolder = os.path.join(output_folder, relative_path)
+
+                os.makedirs(output_subfolder, exist_ok=True)
+
+                output_pdf = os.path.join(
+                    output_subfolder, os.path.splitext(filename)[0] + "_explained.pdf"
+                )
+                chat_gpt = Chat_gpt(api_key=api_key, language=language, model=model)
+                creator = Creator(pdf_path, chat_gpt)
+                parsed_list = creator.process()
+                markdown_interpretations = "\n\n---\n\n".join(parsed_list)
+                markdown_to_pdf(markdown_interpretations, output_pdf, wkhtmltopdf_path)
 
 if __name__ == "__main__":
     main()
