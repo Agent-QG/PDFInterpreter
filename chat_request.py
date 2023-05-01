@@ -13,7 +13,10 @@ class Chat_gpt:
         self.content_queue = Queue()
 
         # about threading, if you don't use threading, ignore it.
-        self.sem = threading.Semaphore(20)
+        self.sem = threading.Semaphore(12)
+
+        # rate limit
+        self.rate_limit = False
 
     # multiple
     def go_thread(self, text, tag_num):
@@ -25,6 +28,10 @@ class Chat_gpt:
         language = self.language
         model = self.model
         retries = 0
+
+        # first find rate limit threading
+        first_find_threading_error = False
+
         while retries < max_retries:
             try:
                 response = openai.ChatCompletion.create(
@@ -37,8 +44,20 @@ class Chat_gpt:
                     temperature=0.5,
                 )
                 self.content_queue.put((tag_num, response['choices'][0]['message']['content'].strip()))
+
+                self.rate_limit = False
+                first_find_threading_error = False
+
                 break
             except openai.error.RateLimitError as e:
+
+                if not self.rate_limit:
+                    first_find_threading_error = True
+                    self.rate_limit = True
+                else:
+                    while self.rate_limit and not first_find_threading_error:
+                        time.sleep(retry_delay)
+
                 if retries < max_retries - 1:
                     retries += 1
                     time.sleep(retry_delay)
