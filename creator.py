@@ -1,14 +1,15 @@
-
 import threading
 from utils import read_pdf, split_text, fix_markdown_issues
 from tqdm import tqdm
-
+import os
 
 class Creator:
 
     def __init__(self, file_path, chat_gpt):
         self.file_path = file_path
+        self.file_name = os.path.basename(file_path)  # Add this line
         self.chat_gpt = chat_gpt
+
 
     def process(self):
         pdf_contents = read_pdf(self.file_path)
@@ -42,7 +43,7 @@ class Creator:
                         target_num += 1
 
         done_request = 0
-        with tqdm(total=target_num,position=0) as pbar:
+        with tqdm(total=target_num, position=0, desc=self.file_name) as pbar:
             while done_request != target_num:
                 while not self.chat_gpt.content_queue.empty():
                     pos, content = self.chat_gpt.content_queue.get()

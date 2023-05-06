@@ -45,19 +45,17 @@ which wkhtmltopdf
 ```
 - For Windows, the default path is `C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe`. You can get your wkhtmltopdf path by 
 ```shell
-where wkhtmltopdf
+dir /s /b C:\ | findstr /i wkhtmltopdf.exe
 ```
+(I assume you installed it in C:\)
+- If you still encounter an error with wkhtmltopdf, consider granting administrator privileges to both your wkhtmltopdf and the project.
 - If you encounter any other issues, please feel free to open an issue on GitHub or contact me directly at my.qgong@gmail.com.
 
-## 注意事项/已知限制
+## 未来发展
+- 适配GPT-4模型和图片读取功能：我们正在努力将GPT-4模型整合到项目中以提高解析和生成结果的质量。
+- 开发网页版：我们计划开发一个网页版并且添加更丰富的功能，让用户能够更方便地在线使用本工具。
 
-- 由于尚未获得GPT-4.0的访问权限，该项目目前无法读取PDF中的图片。会持续关注GPT-4.0的更新，并在获得访问权限后更新项目以支持图片解析。
+## Future Development
 
-- 本项目在处理大型PDF文件时可能会遇到性能瓶颈。将继续优化代码以提高处理速度和效率。
-
-## Known Limitations/Notes
-
-- As we currently do not have access to GPT-4.0, this project is unable to read images within PDFs. Will continue to monitor updates on GPT-4.0 and update the project to support image interpretation once access is granted.
-
-- The project may encounter performance bottlenecks when processing large PDF files. Will continue to optimize the code to improve processing speed and efficiency.
-
+- Adapting to GPT-4 Model and Image Reading Capability: We are working on integrating the GPT-4 model into the project to improve the quality of parsing and generated results.
+- Developing a Web Version: We plan to develop a web-based version of this tool and add more functions to make it more accessible and convenient for users to use online.

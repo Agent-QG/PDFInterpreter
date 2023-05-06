@@ -10,12 +10,12 @@ load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 language = os.getenv("LANGUAGE")
 model = os.getenv("MODEL")
-wkhtmltopdf_path = os.getenv("WKHTMLTOPDFPATH")
-
+wkhtmltopdf_path = os.getenv(r"WKHTMLTOPDFPATH")
+prompt=os.getenv(r"PROMPT")
 
 def main():
     input_folder = "input"
-    output_folder = "output/DL_Explained"
+    output_folder = "output"
 
     for root, _, filenames in os.walk(input_folder):
         for filename in filenames:
@@ -29,7 +29,7 @@ def main():
                 output_pdf = os.path.join(
                     output_subfolder, os.path.splitext(filename)[0] + "_explained.pdf"
                 )
-                chat_gpt = Chat_gpt(api_key=api_key, language=language, model=model)
+                chat_gpt = Chat_gpt(api_key=api_key, language=language, model=model, prompt=prompt)
                 creator = Creator(pdf_path, chat_gpt)
                 parsed_list = creator.process()
                 markdown_interpretations = "\n\n---\n\n".join(parsed_list)

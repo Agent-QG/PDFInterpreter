@@ -10,9 +10,12 @@ def read_pdf(file_path):
         for page_num in range(len(reader.pages)):
             page = reader.pages[page_num]
             content = page.extract_text()
+            content = re.sub(r'\s*\d+\s*$', '', content)
+
             pages.append(content)
 
     return pages
+
 
 
 def split_text(text, max_tokens):
