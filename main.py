@@ -11,7 +11,7 @@ api_key = os.getenv("OPENAI_API_KEY")
 language = os.getenv("LANGUAGE")
 model = os.getenv("MODEL")
 wkhtmltopdf_path = os.getenv(r"WKHTMLTOPDFPATH")
-prompt=os.getenv(r"Prompt")
+prompt=os.getenv(r"PROMPT")
 
 def main():
     input_folder = "input"
