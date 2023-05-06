@@ -52,10 +52,10 @@ dir /s /b C:\ | findstr /i wkhtmltopdf.exe
 - If you encounter any other issues, please feel free to open an issue on GitHub or contact me directly at my.qgong@gmail.com.
 
 ## 未来发展
-- 适配GPT-4模型和图片读取功能：我们正在努力将GPT-4模型整合到项目中，并添加图片读取功能，以提高解析和生成结果的质量。
-- 开发网页版：我们计划开发一个网页版，让用户能够更方便地在线使用本工具。
+- 适配GPT-4模型和图片读取功能：我们正在努力将GPT-4模型整合到项目中以提高解析和生成结果的质量。
+- 开发网页版：我们计划开发一个网页版并且添加更丰富的功能，让用户能够更方便地在线使用本工具。
 
 ## Future Development
 
-- Adapting to GPT-4 Model and Image Reading Capability: We are working on integrating the GPT-4 model into the project and adding image reading functionality to improve the quality of parsing and generated results.
-- Developing a Web Version: We plan to develop a web-based version of this tool to make it more accessible and convenient for users to use online.
+- Adapting to GPT-4 Model and Image Reading Capability: We are working on integrating the GPT-4 model into the project to improve the quality of parsing and generated results.
+- Developing a Web Version: We plan to develop a web-based version of this tool and add more functions to make it more accessible and convenient for users to use online.
